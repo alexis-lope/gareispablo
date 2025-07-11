@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ libro.titulo }} - Librería Online{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        {% if libro.imagen %}
+            <img src="{{ libro.imagen.url }}" class="img-fluid rounded" alt="{{ libro.titulo }}">
+        {% else %}
+            <img src="/placeholder.svg?height=400&width=300" class="img-fluid rounded" alt="{{ libro.titulo }}">
+        {% endif %}
+    </div>
+    
+    <div class="col-md-8">
+        <h1>{{ libro.titulo }}</h1>
+        <h5 class="text-muted">por {{ libro.autor }}</h5>
+        
+        <div class="mb-3">
+            <span class="badge bg-secondary">{{ libro.categoria.nombre }}</span>
+            {% if libro.stock_bajo %}
+                <span class="badge bg-warning">¡Últimas unidades!</span>
+            {% endif %}
+        </div>
+        
+        {% if libro.calificacion > 0 %}
+            <div class="mb-3">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= libro.calificacion %}
+                        <i class="fas fa-star text-warning"></i>
+                    {% else %}
+                        <i class="far fa-star text-warning"></i>
+                    {% endif %}
+                {% endfor %}
+                <span class="ms-2">({{ libro.calificacion }}/5)</span>
+            </div>
+        {% endif %}
+        
+        <div class="mb-3">
+            {% if libro.esta_en_oferta %}
+                <h3>
+                    <span class="text-danger">${{ libro.precio }}</span>
+                    <span class="price-original me-2">${{ libro.precio_original }}</span>
+                   
+                    <span class="badge bg-danger ms-2">-{{ libro.descuento_porcentaje }}%</span>
+                </h3>
+            {% else %}
+                <h3>${{ libro.precio }}</h3>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            <strong>Stock disponible:</strong> {{ libro.stock }} unidades
+        </div>
+        
+        {% if libro.descripcion %}
+            <div class="mb-4">
+                <h5>Descripción</h5>
+                <p>{{ libro.descripcion|linebreaks }}</p>
+            </div>
+        {% endif %}
+        
+        <div class="row mb-4">
+            {% if libro.isbn %}
+                <div class="col-md-6">
+                    <strong>ISBN:</strong> {{ libro.isbn }}
+                </div>
+            {% endif %}
+            {% if libro.paginas %}
+                <div class="col-md-6">
+                    <strong>Páginas:</strong> {{ libro.paginas }}
+                </div>
+            {% endif %}
+            {% if libro.editorial %}
+                <div class="col-md-6">
+                    <strong>Editorial:</strong> {{ libro.editorial }}
+                </div>
+            {% endif %}
+            {% if libro.fecha_publicacion %}
+                <div class="col-md-6">
+                    <strong>Fecha de publicación:</strong> {{ libro.fecha_publicacion }}
+                </div>
+            {% endif %}
+        </div>
+        
+        {% if libro.stock > 0 %}
+            <form method="GET" action="{% url 'confirmar_compra' libro.id %}">
+                <div class="row align-items-end">
+                    <div class="col-md-3">
+                        <label for="cantidad" class="form-label">Cantidad:</label>
+                        <input type="number" class="form-control" name="cantidad" id="cantidad" value="1" min="1" max="{{ libro.stock }}">
+                    </div>
+                    <div class="col-md-4">
+                        {% if user.is_authenticated %}
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-shopping-cart"></i> Comprar
+                            </button>
+                        {% else %}
+                            <a href="{% url 'login_usuario' %}?next={% url 'detalle_libro' libro.id %}" class="btn btn-success btn-lg">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar sesión para comprar
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i> Este libro está agotado
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if libros_relacionados %}
+    <hr class="my-5">
+    <h3>Libros relacionados</h3>
+    <div class="row">
+        {% for libro_rel in libros_relacionados %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card book-card h-100">
+                    {% if libro_rel.imagen %}
+                        <img src="{{ libro_rel.imagen.url }}" class="card-img-top book-image" alt="{{ libro_rel.titulo }}">
+                    {% else %}
+                        <img src="/placeholder.svg?height=300&width=200" class="card-img-top book-image" alt="{{ libro_rel.titulo }}">
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h6 class="card-title">{{ libro_rel.titulo }}</h6>
+                        <p class="card-text text-muted small">{{ libro_rel.autor }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>${{ libro_rel.precio }}</strong>
+                            <a href="{% url 'detalle_libro' libro_rel.id %}" class="btn btn-primary btn-sm">Ver</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

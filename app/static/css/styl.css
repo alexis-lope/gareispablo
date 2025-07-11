@@ -1,0 +1,695 @@
+/* Paleta de colores principal */
+:root {
+  --primary: #c62828;       /* Rojo vino más sofisticado */
+  --primary-dark: #8e0000;
+  --primary-light: #ff5f52;
+  --secondary: #5d4037;     /* Marrón cálido */
+  --accent: #c29109;        /* Naranja dorado */
+  --dark:  #0e0d0d;         /* Azul grisáceo oscuro */
+  --light: #f5f5f5;
+  --gray: #757575;
+  --bg-color: #faf4f0;      /* Fondo beige claro */
+  --card-bg: #ffffff;
+  --text: #3e2723;          /* Marrón oscuro para texto */
+  --text-light: #8d6e63;
+}
+
+/* Fondo con textura sutil */
+body {
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--bg-color);
+    
+    /* Opción 1: Fondo de estantería de libros (imagen externa) */
+    background-image: url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    /* Opción 2: Fondo de libros antiguos */
+    /* background-image: url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); */
+    
+    /* Opción 3: Fondo de biblioteca clásica */
+    /* background-image: url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); */
+    
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  
+  /* Capa semitransparente para mejorar legibilidad */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(211, 206, 206, 0.801); /* Ajusta este valor para más/menos transparencia */
+    z-index: -1;
+  }
+
+/* Navbar con gradiente */
+.navbar {
+  background: linear-gradient(135deg, var(--dark), #181713) !important;
+  box-shadow: 0 4px 20px rgb(231, 3, 3);
+  padding: 0.8rem 1rem;
+}
+
+.navbar-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white !important;
+  letter-spacing: 0.5px;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  margin: 0 0.3rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(209, 16, 16, 0.1);
+  color: white !important;
+}
+
+/* Tarjetas de libros con diseño premium */
+.card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  background-color: var(--card-bg);
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  z-index: 2;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(198, 40, 40, 0.15);
+}
+
+.book-card-image {
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card:hover .book-card-image {
+  transform: scale(1.08);
+}
+
+.card-body {
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.75rem;
+  font-size: 1.2rem;
+}
+
+/* Badges con diseño moderno */
+.badge {
+  font-weight: 600;
+  padding: 0.4em 0.8em;
+  font-size: 0.75em;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--secondary) !important;
+}
+
+/* Botones con gradiente */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border: none;
+  box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(198, 40, 40, 0.4);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+}
+
+/* Footer con diseño elegante */
+/* Footer negro */
+.footer {
+    background: #000000;  /* Fondo negro sólido */
+    color: white;         /* Texto blanco */
+    padding: 3rem 0;
+    margin-top: 4rem;
+  }
+  
+  /* Elimina el gradiente superior si lo prefieres */
+  .footer::before {
+    content: none; /* Elimina la línea decorativa superior */
+  }
+  
+  /* Opcional: si quieres mantener algún detalle decorativo */
+  .footer h5::after {
+    background-color: white; /* Cambia el subrayado a blanco */
+  }
+  
+  /* Ajusta colores de texto para mejor contraste */
+  .footer p, 
+  .footer a {
+    color: rgba(255, 255, 255, 0.8); /* Texto más legible */
+  }
+  
+  .footer a:hover {
+    color: var(--accent); /* Color de acento al hacer hover */
+  }
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.footer h5 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.footer h5::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+/* Efectos de hover para enlaces */
+a {
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+/* Efecto de sombra para texto en títulos */
+.text-shadow {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.3rem;
+  }
+  
+  .book-card-image {
+    height: 220px;
+  }
+  
+  .card-body {
+    padding: 1.2rem;
+  }
+}
+
+/* Animación de carga mejorada */
+@keyframes shine {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+.book-card-image.loading {
+  background: linear-gradient(90deg, #0c0fd8 25%, #f5f5f5 50%, #ececec 75%);
+  background-size: 200px 100%;
+  animation: shine 1.5s infinite linear;
+}
+
+
+/* Estilos para la barra de anuncios */
+.announcement-bar {
+    background-color: #c62828; /* Color que combine con tu diseño */
+    color: white;
+    padding: 8px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+  
+  .announcement-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scrollAnnouncement 30s linear infinite;
+  }
+  
+  .announcement-content span {
+    margin-right: 40px;
+    display: inline-block;
+  }
+  
+  /* Animación de desplazamiento */
+  @keyframes scrollAnnouncement {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .announcement-bar {
+      font-size: 12px;
+      padding: 6px 0;
+    }
+    
+    .announcement-content {
+      animation-duration: 20s;
+    }
+  }
+
+
+  
+  /* Barra de anuncios superior */
+.top-announcement-bar {
+    background-color: #000000; /* Fondo negro */
+    color: white;
+    padding: 8px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    z-index: 1030; /* Asegura que esté sobre otros elementos */
+  }
+  
+  .announcement-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scrollAnnouncement 25s linear infinite;
+  }
+  
+  .announcement-content span {
+    margin-right: 40px;
+    display: inline-block;
+  }
+  
+  /* Animación de desplazamiento */
+  @keyframes scrollAnnouncement {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  
+  
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .top-announcement-bar {
+      font-size: 12px;
+      padding: 6px 0;
+    }
+    
+    .announcement-content {
+      animation-duration: 20s;
+    }
+  }
+
+
+  .navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: white !important;
+    letter-spacing: 0.5px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px; /* Espacio para el subrayado */
+  }
+  
+  /* Subrayado animado para el título */
+  .navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: white !important;
+    letter-spacing: 0.5px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px; /* Espacio para el subrayado */
+  }
+  
+  /* Subrayado rojo animado */
+  .navbar-brand::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px; /* Grosor del subrayado */
+    background-color: #ff0000; /* Rojo sólido */
+    /* O usar tu variable roja si prefieres: background-color: var(--primary); */
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar-brand:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+
+  /* Estilo con dos colores diferentes */
+.nav-tabs .nav-link#libros-tab.active {
+  background-color: #c62828; /* Rojo para gestión de libros */
+}
+
+.nav-tabs .nav-link#pedidos-tab.active {
+  background-color: #2e7d32; /* Verde para pedidos recientes */
+}
+
+/* Efecto hover específico */
+.nav-tabs .nav-link#libros-tab:hover:not(.active) {
+  background-color: #9e8c8f48; /* Rojo muy claro */
+}
+
+.nav-tabs .nav-link#pedidos-tab:hover:not(.active) {
+  background-color: #d0e9d281; /* Verde muy claro */
+}
+
+/* Estilos para tablas responsivas */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  /* Ocultar columnas menos importantes en móviles */
+  .table thead th:nth-child(4),
+  .table tbody td:nth-child(4),
+  .table thead th:nth-child(5),
+  .table tbody td:nth-child(5) {
+    display: none;
+  }
+  
+  /* Ajustar tamaño de imágenes */
+  .table img {
+    width: 40px;
+    height: 56px;
+  }
+  
+  /* Estilo para celdas en móviles */
+  .table td, .table th {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  /* Botones más pequeños */
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Tabs más compactas */
+  .nav-tabs .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  /* Estadísticas en columnas */
+  .stats-card .card-body {
+    padding: 0.75rem;
+  }
+  
+  .stats-card h4 {
+    font-size: 1.2rem;
+  }
+  
+  .stats-card i {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Versión ultra compacta para móviles pequeños */
+  .table-responsive {
+    border: 0;
+  }
+  
+  .table {
+    width: 100%;
+    border: 0;
+  }
+  
+  .table thead {
+    display: none;
+  }
+  
+  .table tr {
+    margin-bottom: 1rem;
+    display: block;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+  }
+  
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.8rem;
+  }
+  
+  .table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+  
+  /* Añadir etiquetas a las celdas */
+  .table td[data-label] {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  
+  .table td[data-label]:before {
+    position: absolute;
+    left: 0.5rem;
+    width: calc(50% - 1rem);
+    padding-right: 1rem;
+    text-align: left;
+  }
+  
+  /* Esconder acciones en su propia fila */
+  .table td:last-child {
+    border-bottom: 0;
+    justify-content: flex-end;
+  }
+}
+
+
+.agora {
+  height: 90px;
+  object-fit: cover;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.navbar-brand:hover .agora {
+  transform: scale(1.1) rotate(-5deg);
+  filter: drop-shadow(0 6px 12px rgba(255, 255, 255, 0.4)) 
+          brightness(1.05) 
+          contrast(1.1);
+  animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% {
+      filter: drop-shadow(0 6px 12px rgba(255, 255, 255, 0.4)) 
+              brightness(1.05);
+  }
+  100% {
+      filter: drop-shadow(0 6px 16px rgba(255, 215, 0, 0.6)) 
+              brightness(1.1);
+  }
+}
+
+
+/* Estilos mejorados para el encabezado y logo */
+.navbar-brand {
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.agora-logo {
+    height: 110px; /* Tamaño aumentado */
+    width: auto;
+    object-fit: contain;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Efectos hover */
+.navbar-brand:hover .agora-logo {
+    transform: scale(1.05) rotate(-5deg);
+    filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.2));
+}
+
+.navbar-brand:hover .logo-text {
+    color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .agora-logo {
+        height: 90px;
+    }
+    .logo-text {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .agora-logo {
+        height: 70px;
+    }
+    .logo-text {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo-container {
+        gap: 5px;
+    }
+    .agora-logo {
+        height: 60px;
+    }
+    .logo-text {
+        font-size: 1rem;
+    }
+}
+
+/* Aumentar tamaño del logo manteniendo el encabezado */
+.navbar {
+  min-height: 80px; /* Altura fija para el navbar */
+  overflow: visible; /* Permite que el logo sobresalga */
+}
+
+.agora {
+  height: 120px; /* Tamaño aumentado */
+  width: auto;
+  object-fit: contain;
+  margin-top: -10px; /* Ajuste para centrar verticalmente */
+  margin-bottom: -10px;
+  transition: transform 0.3s ease;
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 992px) {
+  .agora {
+    height: 100px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .agora {
+    height: 80px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* Efecto hover opcional */
+.navbar-brand:hover .agora {
+  transform: scale(1.05);
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+}

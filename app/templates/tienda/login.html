@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-lg-5 col-md-7">
+            <div class="auth-card">
+                <!-- Encabezado con logo -->
+                <div class="auth-header text-center mb-4">
+                    
+                    <h2 class="auth-title">Bienvenido de vuelta</h2>
+                    <p class="auth-subtitle">Ingresa tus credenciales para acceder</p>
+                </div>
+                
+                <!-- Cuerpo del formulario -->
+                <div class="auth-body">
+                    <form method="POST" class="auth-form">
+                        {% csrf_token %}
+                        
+                        <!-- Campo Email -->
+                        <div class="form-group">
+                            <label for="{{ formulario.username.id_for_label }}" class="form-label">
+                                <i class="fas fa-envelope"></i> Tu correo Gmail
+                            </label>
+                            <div class="input-group">
+                                {{ formulario.username }}
+                                <span class="input-icon">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                            {% if formulario.username.errors %}
+                                <div class="form-error">
+                                    {{ formulario.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Campo Contraseña -->
+                        <div class="form-group">
+                            <label for="{{ formulario.password.id_for_label }}" class="form-label">
+                                <i class="fas fa-lock"></i> Contraseña
+                            </label>
+                            <div class="input-group">
+                                {{ formulario.password }}
+                                <span class="input-icon">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                                <button class="password-toggle" type="button">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            {% if formulario.password.errors %}
+                                <div class="form-error">
+                                    {{ formulario.password.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Opciones adicionales -->
+                        <div class="auth-options">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Recordar mi sesión</label>
+                            </div>
+                            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                        </div>
+                        
+                        <!-- Botón de ingreso -->
+                        <button type="submit" class="auth-btn">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </button>
+                        
+                        <!-- Divisor -->
+                        <div class="auth-divider">
+                            <span>o</span>
+                        </div>
+                        
+                        <!-- Enlace a registro -->
+                        <div class="auth-footer">
+                            ¿No tienes cuenta? 
+                            <a href="{% url 'registro_usuario' %}" class="auth-link">Crear una cuenta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos personalizados */
+    .login-container {
+       
+        padding: 2rem;
+    }
+    
+    .auth-card {
+       background-color: aliceblue;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .auth-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .auth-header {
+        margin-bottom: 2rem;
+    }
+    
+    .auth-logo {
+        height: 80px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .auth-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .auth-subtitle {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+    
+    .form-label i {
+        margin-right: 8px;
+        color: #c62828;
+    }
+    
+    .input-group {
+        position: relative;
+    }
+    
+    .input-group input {
+        width: 100%;
+        padding: 12px 20px 12px 45px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .input-group input:focus {
+        border-color: #c62828;
+        box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1);
+    }
+    
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #95a5a6;
+    }
+    
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #95a5a6;
+        cursor: pointer;
+    }
+    
+    .auth-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1.5rem 0;
+    }
+    
+    .forgot-password {
+        color: #c62828;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .auth-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #c62828;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .auth-btn:hover {
+        background-color: #a51c1c;
+        transform: translateY(-2px);
+    }
+    
+    .auth-btn i {
+        margin-right: 8px;
+    }
+    
+    .auth-divider {
+        position: relative;
+        margin: 2rem 0;
+        text-align: center;
+    }
+    
+    .auth-divider span {
+        display: inline-block;
+        padding: 0 10px;
+        background: white;
+        position: relative;
+        z-index: 1;
+        color: #95a5a6;
+    }
+    
+    .auth-divider:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #e0e0e0;
+        z-index: 0;
+    }
+    
+    .auth-footer {
+        text-align: center;
+        color: #7f8c8d;
+        font-size: 0.95rem;
+    }
+    
+    .auth-link {
+        color: #c62828;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    
+    .form-error {
+        color: #e74c3c;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+</style>
+
+<script>
+    // Función para mostrar/ocultar contraseña
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.password-toggle');
+        
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

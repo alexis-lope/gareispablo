@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Descubre tu próxima gran lectura</h1>
+        <p class="lead mb-4">Miles de libros esperándote. Desde bestsellers hasta joyas ocultas, encuentra la historia perfecta para ti.</p>
+        <a href="#catalogo" class="btn btn-light btn-lg">Explorar Catálogo</a>
+    </div>
+</section>
+
+<!-- Filtros -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label">Buscar libros</label>
+                <input type="text" class="form-control" name="buscar" value="{{ consulta_busqueda }}" 
+                       placeholder="Título, autor o categoría...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Categoría</label>
+                <select class="form-control" name="categoria">
+                    <option value="">Todas las categorías</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.nombre }}" {% if categoria.nombre == filtro_categoria %}selected{% endif %}>
+                            {{ categoria.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Catálogo de Libros -->
+<section id="catalogo" class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h3 mb-0">Catálogo de Libros</h2>
+            <span class="text-muted">{{ libros|length }} libros encontrados</span>
+        </div>
+        
+        {% if libros %}
+            <div class="row">
+                {% for libro in libros %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card book-card h-100">
+                            <div class="position-relative">
+                                {% if libro.imagen %}
+                                    <img src="{{ libro.imagen.url }}" class="card-img-top book-image" alt="{{ libro.titulo }}">
+                                {% else %}
+                                    <div class="book-image card-img-top d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-book fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if libro.esta_en_oferta %}
+                                    <span class="badge discount-badge position-absolute top-0 start-0 m-2">
+                                        -{{ libro.descuento_porcentaje }}%
+                                    </span>
+                                {% endif %}
+                                
+                                {% if libro.stock_bajo and libro.stock > 0 %}
+                                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">
+                                        ¡Últimas {{ libro.stock }}!
+                                    </span>
+                                {% elif libro.stock == 0 %}
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                                        Agotado
+                                    </span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge bg-secondary mb-2 align-self-start">{{ libro.categoria.nombre }}</span>
+                                <h5 class="card-title">{{ libro.titulo|truncatechars:50 }}</h5>
+                                <p class="card-text text-muted small">por {{ libro.autor }}</p>
+                                
+                                <!-- Calificación -->
+                                <div class="mb-2">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= libro.calificacion %}
+                                            <i class="fas fa-star rating"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-muted"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <small class="text-muted ms-1">({{ libro.calificacion }})</small>
+                                </div>
+                                
+                                <!-- Precio -->
+                                <div class="mb-3">
+                                    {% if libro.esta_en_oferta %}
+                                        <span class="price-original">${{ libro.precio_original }}</span>
+                                    {% endif %}
+                                    <span class="price-current">${{ libro.precio }}</span>
+                                </div>
+                                
+                                {% if libro.descripcion %}
+                                    <p class="card-text text-muted small">{{ libro.descripcion|truncatewords:15 }}</p>
+                                {% endif %}
+                                
+                                <!-- Botón que siempre lleva a detalle -->
+                                <div class="mt-auto">
+                                    <a href="{% url 'detalle_libro' libro.id %}" class="btn btn-outline-primary w-100 mb-2">
+                                        <i class="fas fa-eye me-2"></i>Ver Detalles
+                                    </a>
+                                    
+                                    <!-- Botón de compra rápida -->
+                                    {% if libro.stock > 0 %}
+                                        {% if user.is_authenticated %}
+                                            <a href="{% url 'confirmar_compra' libro.id %}?cantidad=1" class="btn btn-primary w-100">
+                                                <i class="fas fa-shopping-cart me-2"></i>Comprar
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'login_usuario' %}?next={% url 'detalle_libro' libro.id %}" class="btn btn-primary w-100">
+                                                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        <button class="btn btn-secondary w-100" disabled>
+                                            <i class="fas fa-times me-2"></i>Agotado
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Paginación -->
+            {% if libros.has_other_pages %}
+                <nav aria-label="Paginación de libros" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if libros.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?pagina={{ libros.previous_page_number }}{% if consulta_busqueda %}&buscar={{ consulta_busqueda }}{% endif %}{% if filtro_categoria %}&categoria={{ filtro_categoria }}{% endif %}">Anterior</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in libros.paginator.page_range %}
+                            {% if libros.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > libros.number|add:'-3' and num < libros.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?pagina={{ num }}{% if consulta_busqueda %}&buscar={{ consulta_busqueda }}{% endif %}{% if filtro_categoria %}&categoria={{ filtro_categoria }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if libros.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?pagina={{ libros.next_page_number }}{% if consulta_busqueda %}&buscar={{ consulta_busqueda }}{% endif %}{% if filtro_categoria %}&categoria={{ filtro_categoria }}{% endif %}">Siguiente</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4>No se encontraron libros</h4>
+                <p class="text-muted">Intenta con otros términos de búsqueda.</p>
+                <a href="{% url 'inicio' %}" class="btn btn-primary">Ver todos los libros</a>
+            </div>
+        {% endif %}
+        {% if libros %}
+  <p>Hay {{ libros.paginator.count }} libros totales.</p>
+{% else %}
+  <p>No se encontró nada.</p>
+{% endif %}
+
+    </div>
+</section>
+{% endblock %}

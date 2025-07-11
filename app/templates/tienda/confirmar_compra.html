@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Compra - {{ libro.titulo }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-shopping-cart"></i> Confirmar Compra</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if libro.imagen %}
+                            <img src="{{ libro.imagen.url }}" class="img-fluid rounded" alt="{{ libro.titulo }}">
+                        {% else %}
+                            <img src="/placeholder.svg?height=200&width=150" class="img-fluid rounded" alt="{{ libro.titulo }}">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h5>{{ libro.titulo }}</h5>
+                        <p class="text-muted">por {{ libro.autor }}</p>
+                        <p><strong>Precio unitario:</strong> ${{ libro.precio }}</p>
+                        <p><strong>Cantidad:</strong> {{ cantidad }}</p>
+                        <hr>
+                        <h4><strong>Total: ${{ total }}</strong></h4>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <form method="POST" action="{% url 'procesar_compra' libro.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="cantidad" value="{{ cantidad }}">
+                    
+                    <div class="mb-3">
+                        <label for="notas" class="form-label">Notas adicionales (opcional):</label>
+                        <textarea class="form-control" name="notas" id="notas" rows="3" placeholder="Instrucciones especiales para la entrega..."></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'detalle_libro' libro.id %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-credit-card"></i> Confirmar Compra
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

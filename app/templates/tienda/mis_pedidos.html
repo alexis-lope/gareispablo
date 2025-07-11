@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Pedidos{% endblock %}
+
+{% block content %}
+<h2><i class="fas fa-shopping-bag"></i> Mis Pedidos</h2>
+
+{% if pedidos %}
+    <div class="row">
+        {% for pedido in pedidos %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <span><strong>Pedido #{{ pedido.id }}</strong></span>
+                        <span class="badge bg-{% if pedido.estado == 'entregado' %}success{% elif pedido.estado == 'cancelado' %}danger{% elif pedido.estado == 'enviado' %}info{% else %}warning{% endif %}">
+                            {{ pedido.get_estado_display }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                {% if pedido.libro.imagen %}
+                                    <img src="{{ pedido.libro.imagen.url }}" class="img-fluid rounded" alt="{{ pedido.libro.titulo }}">
+                                {% else %}
+                                    <img src="/placeholder.svg?height=120&width=80" class="img-fluid rounded" alt="{{ pedido.libro.titulo }}">
+                                {% endif %}
+                            </div>
+                            <div class="col-8">
+                                <h6>{{ pedido.libro.titulo }}</h6>
+                                <p class="text-muted small">{{ pedido.libro.autor }}</p>
+                                <p><strong>Cantidad:</strong> {{ pedido.cantidad }}</p>
+                                <p><strong>Total:</strong> ${{ pedido.total }}</p>
+                                <p class="text-muted small">{{ pedido.fecha_creacion|date:"d/m/Y H:i" }}</p>
+                            </div>
+                        </div>
+                        {% if pedido.notas %}
+                            <hr>
+                            <p><strong>Notas:</strong> {{ pedido.notas }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center">
+        <i class="fas fa-shopping-bag fa-3x mb-3"></i>
+        <h4>No tienes pedidos aún</h4>
+        <p>¡Explora nuestro catálogo y realiza tu primera compra!</p>
+        <a href="{% url 'inicio' %}" class="btn btn-primary">Ver libros</a>
+    </div>
+{% endif %}
+{% endblock %}
